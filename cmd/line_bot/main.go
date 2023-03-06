@@ -28,7 +28,7 @@ func main() {
 		v1.POST("/message-delivery", handler.SendMessage)
 
 		// commit #7 Query message list of the user
-		// v1.GET("/user-message/:userID", handler.GetMessagesByUserID)
+		v1.GET("/user-message/:userId", handler.GetMessagesByUserId)
 
 	}
 	port := os.Getenv("PORT")

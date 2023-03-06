@@ -86,28 +86,16 @@ func SendMEssage(m *SendingMessage) error {
 	return err
 }
 
-// func GetMessagesByUserID(id string) (Message, error) {
-// 	var msgs []Message
-// 	objID, err := primitive.ObjectIDFromHex(id)
-// 	if err != nil {
-// 		return msg, err
-// 	}
-// 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-// 	defer cancel()
-// 	err = db.Collection.FindOne(ctx, bson.M{"_id": objID}).Decode(&msg)
-// 	return msg, err
-// }
-
-// func GetAllMessages() ([]Message, error) {
-// 	var msgs []Message
-// 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-// 	defer cancel()
-// 	cursor, err := db.Collection.Find(ctx, bson.M{})
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	if err = cursor.All(ctx, &msgs); err != nil {
-// 		return nil, err
-// 	}
-// 	return msgs, nil
-// }
+func GetMessagesByUserId(userId string) ([]Message, error) {
+	var msgs []Message
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	cursor, err := db.Collection.Find(ctx, bson.D{{Key: "userId", Value: userId}})
+	if err != nil {
+		return nil, err
+	}
+	if err = cursor.All(ctx, &msgs); err != nil {
+		return nil, err
+	}
+	return msgs, err
+}

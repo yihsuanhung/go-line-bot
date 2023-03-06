@@ -84,13 +84,13 @@ func SendMessage(c *gin.Context) {
 	}
 }
 
-// func GetMessagesByUserID(c *gin.Context) {
-// 	userID := c.Params.ByName("userID")
-// 	msg, err := model.GetMessagesByUserID(userID)
-// 	if err != nil {
-// 		c.AbortWithStatus(http.StatusNotFound)
-// 	} else {
-// 		c.JSON(http.StatusOK, msg)
-// 	}
+func GetMessagesByUserId(c *gin.Context) {
+	userId := c.Params.ByName("userId")
+	msg, err := model.GetMessagesByUserId(userId)
+	if err != nil {
+		c.AbortWithStatus(http.StatusNotFound)
+	} else {
+		c.JSON(http.StatusOK, msg)
+	}
 
-// }
+}
