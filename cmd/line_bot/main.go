@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/yihsuanhung/go-line-bot/internal/handler"
+	"github.com/yihsuanhung/go-line-bot/pkg/handler"
 )
 
 func main() {
@@ -21,11 +21,14 @@ func main() {
 		v1.PUT("/user-message/:id", handler.UpdateUserMessage)
 		v1.DELETE("/user-message/:id", handler.DeleteUserMessage)
 
-		// Webhook
+		// commit #5 Webhook
 		v1.POST("/webhook", handler.Webhook)
 
-		// Send message back to line
-		v1.POST("/message", handler.SendMessage) // TODO
+		// commit #6 Send message back to line
+		v1.POST("/message", handler.SendMessage)
+
+		// commit #7 Query message list of the user
+		//TODO
 	}
 	port := os.Getenv("PORT")
 	if port == "" {
