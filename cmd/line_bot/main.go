@@ -15,20 +15,21 @@ func main() {
 	v1 := r.Group("/v1")
 	{
 		// User message CRUD endpoints
-		v1.GET("/user-message", handler.GetAllUserMessages)
-		v1.GET("/user-message/:id", handler.GetUserMessageByID)
-		v1.POST("/user-message", handler.CreateUserMessage)
-		v1.PUT("/user-message/:id", handler.UpdateUserMessage)
-		v1.DELETE("/user-message/:id", handler.DeleteUserMessage)
+		v1.GET("/message", handler.GetAllMessages)
+		v1.GET("/message/:id", handler.GetMessageByID)
+		v1.POST("/message", handler.CreateMessage)
+		v1.PUT("/message/:id", handler.UpdateMessage)
+		v1.DELETE("/message/:id", handler.DeleteMessage)
 
 		// commit #5 Webhook
 		v1.POST("/webhook", handler.Webhook)
 
 		// commit #6 Send message back to line
-		v1.POST("/message", handler.SendMessage)
+		v1.POST("/message-delivery", handler.SendMessage)
 
 		// commit #7 Query message list of the user
-		//TODO
+		// v1.GET("/user-message/:userID", handler.GetMessagesByUserID)
+
 	}
 	port := os.Getenv("PORT")
 	if port == "" {

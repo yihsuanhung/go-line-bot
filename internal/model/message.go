@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type UserMessage struct {
+type Message struct {
 	ID        primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
 	MessageId string             `bson:"messageId" json:"messageId"`
 	Message   string             `bson:"message" json:"message"`
@@ -26,33 +26,33 @@ type SendingMessage struct {
 	Message string `json:"message" bons:"message"`
 }
 
-func GetAllUserMessages() ([]UserMessage, error) {
-	var users []UserMessage
+func GetAllMessages() ([]Message, error) {
+	var msgs []Message
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	cursor, err := db.Collection.Find(ctx, bson.M{})
 	if err != nil {
 		return nil, err
 	}
-	if err = cursor.All(ctx, &users); err != nil {
+	if err = cursor.All(ctx, &msgs); err != nil {
 		return nil, err
 	}
-	return users, nil
+	return msgs, nil
 }
 
-func GetUserMessageByID(id string) (UserMessage, error) {
-	var userMessage UserMessage
+func GetMessageByID(id string) (Message, error) {
+	var msg Message
 	objID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return userMessage, err
+		return msg, err
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	err = db.Collection.FindOne(ctx, bson.M{"_id": objID}).Decode(&userMessage)
-	return userMessage, err
+	err = db.Collection.FindOne(ctx, bson.M{"_id": objID}).Decode(&msg)
+	return msg, err
 }
 
-func CreateUserMessage(m *UserMessage) error {
+func CreateMessage(m *Message) error {
 	m.ID = primitive.NewObjectID()
 	m.CreatedAt = time.Now()
 	m.UpdatedAt = time.Now()
@@ -62,15 +62,15 @@ func CreateUserMessage(m *UserMessage) error {
 	return err
 }
 
-func UpdateUserMessage(userMessage UserMessage) error {
-	userMessage.UpdatedAt = time.Now()
+func UpdateMessage(msg Message) error {
+	msg.UpdatedAt = time.Now()
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	_, err := db.Collection.ReplaceOne(ctx, bson.M{"_id": userMessage.ID}, userMessage)
+	_, err := db.Collection.ReplaceOne(ctx, bson.M{"_id": msg.ID}, msg)
 	return err
 }
 
-func DeleteUserMessage(id string) error {
+func DeleteMessage(id string) error {
 	objID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return err
@@ -85,3 +85,29 @@ func SendMEssage(m *SendingMessage) error {
 	_, err := bot.LineBot.PushMessage(m.UserId, linebot.NewTextMessage(m.Message)).Do()
 	return err
 }
+
+// func GetMessagesByUserID(id string) (Message, error) {
+// 	var msgs []Message
+// 	objID, err := primitive.ObjectIDFromHex(id)
+// 	if err != nil {
+// 		return msg, err
+// 	}
+// 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+// 	defer cancel()
+// 	err = db.Collection.FindOne(ctx, bson.M{"_id": objID}).Decode(&msg)
+// 	return msg, err
+// }
+
+// func GetAllMessages() ([]Message, error) {
+// 	var msgs []Message
+// 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+// 	defer cancel()
+// 	cursor, err := db.Collection.Find(ctx, bson.M{})
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	if err = cursor.All(ctx, &msgs); err != nil {
+// 		return nil, err
+// 	}
+// 	return msgs, nil
+// }

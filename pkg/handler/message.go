@@ -8,61 +8,61 @@ import (
 	"github.com/yihsuanhung/go-line-bot/internal/model"
 )
 
-func GetAllUserMessages(c *gin.Context) {
-	userMessages, err := model.GetAllUserMessages()
+func GetAllMessages(c *gin.Context) {
+	msg, err := model.GetAllMessages()
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 	} else {
-		c.JSON(http.StatusOK, userMessages)
+		c.JSON(http.StatusOK, msg)
 	}
 }
 
-func GetUserMessageByID(c *gin.Context) {
+func GetMessageByID(c *gin.Context) {
 	id := c.Params.ByName("id")
-	user, err := model.GetUserMessageByID(id)
+	msg, err := model.GetMessageByID(id)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
-		c.JSON(http.StatusOK, user)
+		c.JSON(http.StatusOK, msg)
 	}
 }
 
-func CreateUserMessage(c *gin.Context) {
-	var message model.UserMessage
-	if err := c.BindJSON(&message); err != nil {
+func CreateMessage(c *gin.Context) {
+	var msg model.Message
+	if err := c.BindJSON(&msg); err != nil {
 		fmt.Println("Bind JSON error", err)
 		c.AbortWithStatus(http.StatusBadRequest)
 	} else {
-		if err := model.CreateUserMessage(&message); err != nil {
+		if err := model.CreateMessage(&msg); err != nil {
 			fmt.Println("Create message error", err)
 			c.AbortWithStatus(http.StatusInternalServerError)
 		} else {
-			c.JSON(http.StatusCreated, message)
+			c.JSON(http.StatusCreated, msg)
 		}
 	}
 }
 
-func UpdateUserMessage(c *gin.Context) {
+func UpdateMessage(c *gin.Context) {
 	id := c.Params.ByName("id")
-	userMessage, err := model.GetUserMessageByID(id)
+	msg, err := model.GetMessageByID(id)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
-		if err := c.BindJSON(&userMessage); err != nil {
+		if err := c.BindJSON(&msg); err != nil {
 			c.AbortWithStatus(http.StatusBadRequest)
 		} else {
-			if err := model.UpdateUserMessage(userMessage); err != nil {
+			if err := model.UpdateMessage(msg); err != nil {
 				c.AbortWithStatus(http.StatusInternalServerError)
 			} else {
-				c.JSON(http.StatusOK, userMessage)
+				c.JSON(http.StatusOK, msg)
 			}
 		}
 	}
 }
 
-func DeleteUserMessage(c *gin.Context) {
+func DeleteMessage(c *gin.Context) {
 	id := c.Params.ByName("id")
-	if err := model.DeleteUserMessage(id); err != nil {
+	if err := model.DeleteMessage(id); err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 	} else {
 		c.Status(http.StatusOK)
@@ -83,3 +83,14 @@ func SendMessage(c *gin.Context) {
 		}
 	}
 }
+
+// func GetMessagesByUserID(c *gin.Context) {
+// 	userID := c.Params.ByName("userID")
+// 	msg, err := model.GetMessagesByUserID(userID)
+// 	if err != nil {
+// 		c.AbortWithStatus(http.StatusNotFound)
+// 	} else {
+// 		c.JSON(http.StatusOK, msg)
+// 	}
+
+// }
