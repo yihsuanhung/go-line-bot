@@ -17,6 +17,7 @@ import (
 
 // type Request interface{}
 
+// deprecated
 func Webhook(c *gin.Context) {
 	channelSecret := "8723770c0c4e010ae92251a917553bf2"
 	// channelAccessToken := "2jWKtZiNoEKnvmvL8B4wq0AqXLH0xPZAyBIns+wn51sAYU2B8oYw+0loMNfqvUFWEcnEfezhtVIrCZHqEwQ4/wRNe1Pn4rEvHRpc0SUB53BTQWbKoZJ2RGbqnW35txO2NbjbqNkLkTjQebPtiIXlogdB04t89/1O/w1cDnyilFU="
