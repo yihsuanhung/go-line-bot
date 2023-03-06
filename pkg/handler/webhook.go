@@ -28,8 +28,8 @@ func Webhook(c *gin.Context) {
 			// *Handle only on text message
 
 			case *linebot.TextMessage:
-				userID := event.Source.UserID
-				profile, err := bot.LineBot.GetProfile(userID).Do()
+				userId := event.Source.UserID
+				profile, err := bot.LineBot.GetProfile(userId).Do()
 
 				if err != nil {
 					fmt.Println("Get profile err:", err)
@@ -42,14 +42,14 @@ func Webhook(c *gin.Context) {
 
 				bot.LineBot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(fmt.Sprintf("OK! 收到訊息: %s \n來自: %s", message.Text, profile.DisplayName))).Do()
 
-				userMessage := &model.UserMessage{
+				userMessage := &model.Message{
 					MessageId: message.ID,
 					Message:   message.Text,
 					UserId:    profile.UserID,
 					UserName:  profile.DisplayName,
 				}
 
-				model.CreateUserMessage(userMessage)
+				model.CreateMessage(userMessage)
 
 			// *Handle only on Sticker message
 			case *linebot.StickerMessage:
