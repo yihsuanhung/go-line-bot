@@ -1,4 +1,4 @@
-package controller
+package handler
 
 import (
 	"fmt"
@@ -27,7 +27,7 @@ import (
 // 	}
 // }
 
-func CreateMessage(c *gin.Context) {
+func CreateUserMessage(c *gin.Context) {
 	var message model.UserMessage
 	if err := c.BindJSON(&message); err != nil {
 		fmt.Println("Bind JSON error", err)
