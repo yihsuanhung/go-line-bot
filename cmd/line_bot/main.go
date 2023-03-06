@@ -26,8 +26,13 @@ func main() {
 
 	// set up routes
 	r := gin.Default()
-	r.POST("/message", handler.CreateUserMessage)
-	r.POST("/webhook", handler.Webhook)
+	v1 := r.Group("/v1")
+	{
+		v1.POST("/message", handler.CreateUserMessage)
+		v1.POST("/webhook", handler.Webhook)
+	}
+	// r.POST("/message", handler.CreateUserMessage)
+	// r.POST("/webhook", handler.Webhook)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
