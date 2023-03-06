@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"os"
 
@@ -11,45 +10,29 @@ import (
 )
 
 func main() {
-	// set up db
-	// err := db.Init()
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	// config line bot
-	// var err error
-	// bot, err = linebot.New(channelSecret, channelAccessToken)
-	// if err != nil {
-	// 	log.Fatalf("Failed to create LineBot client: %v", err)
-	// }
-
-	// set up routes
+	// Set up routes
 	r := gin.Default()
 	v1 := r.Group("/v1")
 	{
-		v1.POST("/message", handler.CreateUserMessage)
+		// User message CRUD endpoints
+		v1.GET("/user-message", handler.GetAllUserMessages)
+		v1.GET("/user-message/:id", handler.GetUserMessageByID)
+		v1.POST("/user-message", handler.CreateUserMessage)
+		v1.PUT("/user-message/:id", handler.UpdateUserMessage)
+		v1.DELETE("/user-message/:id", handler.DeleteUserMessage)
+
+		// Webhook
 		v1.POST("/webhook", handler.Webhook)
+
+		// Send message back to line
+		v1.POST("/message", handler.SendMessage) // TODO
 	}
-	// r.POST("/message", handler.CreateUserMessage)
-	// r.POST("/webhook", handler.Webhook)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 	addr := fmt.Sprintf(":%s", port)
 	if err := r.Run(addr); err != nil {
-		log.Fatalf("Failed to start gin: %v", err)
+		panic(fmt.Sprintf("Failed to start gin: %v", err))
 	}
-
-	// config := server.DefaultConfig()
-	// instance := config.Build()
-	// v1 := instance.Group("v1")
-	// v1.GET("/hello", handler.Hello)
-	// v1.POST("/webhook", handler.Webhook)
-	// v1.OPTIONS("/webhook", handler.Preflight) // TODO: middleware
-	// if err := instance.Serve(); err != nil {
-	// 	panic(err)
-	// }
-
 }
