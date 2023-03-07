@@ -2,18 +2,17 @@ package bot
 
 import (
 	"fmt"
-	"os"
-
 	"github.com/line/line-bot-sdk-go/v7/linebot"
+	"github.com/yihsuanhung/go-line-bot/pkg/settings"
 )
 
 var LineBot *linebot.Client
 
-func init() {
+func InitLineBot(s *settings.LineBotInfo) {
 	var err error
 	LineBot, err = linebot.New(
-		os.Getenv("LINE_CHANNEL_SECRET"),
-		os.Getenv("LINE_CHANNEL_ACCESS_TOKEN"),
+		s.ChannelSecret,
+		s.ChannelAccessToken,
 	)
 	if err != nil {
 		fmt.Println(err)
