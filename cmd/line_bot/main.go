@@ -14,7 +14,7 @@ import (
 func main() {
 	cmd.Execute()
 	cfg := conf.NewConfig(
-		conf.WithPath("./chat/app"), // ./chat/app ../../chat/app
+		conf.WithPath("../../chat/app"), // ./chat/app ../../chat/app
 		conf.WithType("yaml"),
 	)
 	var botInfo settings.LineBotInfo
